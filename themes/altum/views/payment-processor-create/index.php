@@ -34,7 +34,7 @@
                 <div class="form-group">
                     <label for="processor"><i class="fas fa-fw fa-credit-card fa-sm text-muted mr-1"></i> <?= l('payment_processors.input.processor') ?></label>
                     <select id="processor" name="processor" class="custom-select <?= \Altum\Alerts::has_field_errors('processor') ? 'is-invalid' : null ?>">
-                        <?php foreach(['paypal', 'stripe', 'crypto_com', 'razorpay', 'paystack', 'mollie'] as $processor): ?>
+                        <?php foreach(['paypal', 'stripe', 'crypto_com', 'razorpay', 'paystack', 'mollie', 'yookassa'] as $processor): ?>
                             <option value="<?= $processor ?>" <?= $data->values['processor'] == $processor ? 'selected="selected"' : null ?>><?= l('pay.custom_plan.' . $processor) ?></option>
                         <?php endforeach ?>
                     </select>

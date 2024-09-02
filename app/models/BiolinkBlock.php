@@ -33,6 +33,8 @@ class BiolinkBlock extends Model {
             'pdf_document' => [['path' => 'files', 'uploaded_file_key' => 'file']],
             'avatar' => [['path' => 'avatars', 'uploaded_file_key' => 'image']],
             'review' => [['path' => 'block_images', 'uploaded_file_key' => 'image']],
+            'tmcatalog' => [['path' => 'block_images', 'uploaded_file_key0' => 'image_0', 'uploaded_file_key1' => 'image_1', 'uploaded_file_key2' => 'image_2']],
+            'tmwawidget' => [['path' => 'block_images', 'uploaded_file_key' => 'image']],																						 
         ];
 
         if(array_key_exists($biolink_block->type, $blocks_with_storage)) {
@@ -72,6 +74,61 @@ class BiolinkBlock extends Model {
             }
         }
 
+        if($biolink_block->type == 'slider') {
+            $biolink_block->settings = json_decode($biolink_block->settings);
+
+            foreach($biolink_block->settings->items as $item) {
+                \Altum\Uploads::delete_uploaded_file($item->image, 'slider_images');
+            }
+        }
+        
+                if($biolink_block->type == 'tmreview') {
+            $biolink_block->settings = json_decode($biolink_block->settings);
+
+            foreach($biolink_block->settings->items as $item) {
+                \Altum\Uploads::delete_uploaded_file($item->image, 'tmreview_images');
+            }
+        }
+                
+
+                    if($biolink_block->type == 'tmcatalog') {
+                                 
+                                       if(!empty($biolink_block->settings->{$block_with_storage['uploaded_file_key0']}) && file_exists(UPLOADS_PATH . $block_with_storage['path'] . '/' . $biolink_block->settings->{$block_with_storage['uploaded_file_key0']})) {
+               
+                    unlink(UPLOADS_PATH . $block_with_storage['path'] . '/' . $biolink_block->settings->{$block_with_storage['uploaded_file_key0']});
+                }
+                
+                                       if(!empty($biolink_block->settings->{$block_with_storage['uploaded_file_key1']}) && file_exists(UPLOADS_PATH . $block_with_storage['path'] . '/' . $biolink_block->settings->{$block_with_storage['uploaded_file_key1']})) {
+               
+                    unlink(UPLOADS_PATH . $block_with_storage['path'] . '/' . $biolink_block->settings->{$block_with_storage['uploaded_file_key1']});
+                }
+                
+                
+                                       if(!empty($biolink_block->settings->{$block_with_storage['uploaded_file_key2']}) && file_exists(UPLOADS_PATH . $block_with_storage['path'] . '/' . $biolink_block->settings->{$block_with_storage['uploaded_file_key2']})) {
+               
+                    unlink(UPLOADS_PATH . $block_with_storage['path'] . '/' . $biolink_block->settings->{$block_with_storage['uploaded_file_key2']});
+                }
+                        
+                        
+                        
+                        
+                    }
+                    
+                if($biolink_block->type == 'tmwawidget') {
+                                 
+                                       if(!empty($biolink_block->settings->{$block_with_storage['uploaded_file_key']}) && file_exists(UPLOADS_PATH . $block_with_storage['path'] . '/' . $biolink_block->settings->{$block_with_storage['uploaded_file_key']})) {
+               
+                    unlink(UPLOADS_PATH . $block_with_storage['path'] . '/' . $biolink_block->settings->{$block_with_storage['uploaded_file_key']});
+                }
+                    }
+                    
+        if($biolink_block->type == 'tmmarket') {
+            $biolink_block->settings = json_decode($biolink_block->settings);
+
+            foreach($biolink_block->settings->items as $item) {
+                \Altum\Uploads::delete_uploaded_file($item->image, 'block_images');
+            }
+        }
         /* Delete from database */
         db()->where('biolink_block_id', $biolink_block_id)->delete('biolinks_blocks');
 

@@ -56,8 +56,8 @@
     <div class="form-group">
         <label for="<?= 'block_text_alignment_' . $row->biolink_block_id ?>"><i class="fas fa-fw fa-align-center fa-sm text-muted mr-1"></i> <?= l('create_biolink_link_modal.input.text_alignment') ?></label>
         <div class="row btn-group-toggle" data-toggle="buttons">
-            <?php foreach(['center', 'justify', 'left', 'right'] as $text_alignment): ?>
-                <div class="col-6">
+            <?php foreach(['center', 'left', 'right', 'justify'] as $text_alignment): ?>
+                <div class="col-4">
                     <label class="btn btn-light btn-block text-truncate <?= ($row->settings->text_alignment  ?? null) == $text_alignment ? 'active"' : null?>">
                         <input type="radio" name="text_alignment" value="<?= $text_alignment ?>" class="custom-control-input" <?= ($row->settings->text_alignment  ?? null) == $text_alignment ? 'checked="checked"' : null ?> />
                         <i class="fas fa-fw fa-align-<?= $text_alignment ?> fa-sm mr-1"></i> <?= l('create_biolink_link_modal.input.text_alignment.' . $text_alignment) ?>
@@ -207,7 +207,7 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
-                                <label for="<?= 'link_start_date_' . $row->biolink_block_id ?>"><i class="fas fa-fw fa-hourglass-start fa-sm text-muted mr-1"></i> <?= l('link.settings.start_date') ?></label>
+                                <label for="<?= 'link_start_date_' . $row->biolink_block_id ?>"><i class="fas fa-fw fa-clock fa-sm text-muted mr-1"></i> <?= l('link.settings.start_date') ?></label>
                                 <input
                                         id="<?= 'link_start_date_' . $row->biolink_block_id ?>"
                                         type="text"
@@ -223,7 +223,7 @@
 
                         <div class="col">
                             <div class="form-group">
-                                <label for="<?= 'link_end_date_' . $row->biolink_block_id ?>"><i class="fas fa-fw fa-hourglass-end fa-sm text-muted mr-1"></i> <?= l('link.settings.end_date') ?></label>
+                                <label for="<?= 'link_end_date_' . $row->biolink_block_id ?>"><i class="fas fa-fw fa-clock fa-sm text-muted mr-1"></i> <?= l('link.settings.end_date') ?></label>
                                 <input
                                         id="<?= 'link_end_date_' . $row->biolink_block_id ?>"
                                         type="text"
@@ -242,23 +242,13 @@
         </div>
 
         <div class="form-group">
-            <label for="<?= 'link_display_continents_' . $row->biolink_block_id ?>"><i class="fas fa-fw fa-earth-europe fa-sm text-muted mr-1"></i> <?= l('global.continents') ?></label>
-            <select id="<?= 'link_display_continents_' . $row->biolink_block_id ?>" name="display_continents[]" class="custom-select" multiple="multiple">
-                <?php foreach(get_continents_array() as $continent_code => $continent_name): ?>
-                    <option value="<?= $continent_code ?>" <?= in_array($continent_code, $row->settings->display_continents ?? []) ? 'selected="selected"' : null ?>><?= $continent_name ?></option>
-                <?php endforeach ?>
-            </select>
-            <small class="form-text text-muted"><?= l('create_biolink_link_modal.settings.display_help') ?></small>
-        </div>
-
-        <div class="form-group">
             <label for="<?= 'link_display_countries_' . $row->biolink_block_id ?>"><i class="fas fa-fw fa-globe fa-sm text-muted mr-1"></i> <?= l('global.countries') ?></label>
             <select id="<?= 'link_display_countries_' . $row->biolink_block_id ?>" name="display_countries[]" class="custom-select" multiple="multiple">
                 <?php foreach(get_countries_array() as $country => $country_name): ?>
                     <option value="<?= $country ?>" <?= in_array($country, $row->settings->display_countries ?? []) ? 'selected="selected"' : null ?>><?= $country_name ?></option>
                 <?php endforeach ?>
             </select>
-            <small class="form-text text-muted"><?= l('create_biolink_link_modal.settings.display_help') ?></small>
+            <small class="form-text text-muted"><?= l('create_biolink_link_modal.input.display_countries_help') ?></small>
         </div>
 
         <div class="form-group">
@@ -268,27 +258,7 @@
                     <option value="<?= $device_type ?>" <?= in_array($device_type, $row->settings->display_devices ?? []) ? 'selected="selected"' : null ?>><?= l('global.device.' . $device_type) ?></option>
                 <?php endforeach ?>
             </select>
-            <small class="form-text text-muted"><?= l('create_biolink_link_modal.settings.display_help') ?></small>
-        </div>
-
-        <div class="form-group">
-            <label for="<?= 'link_display_operating_systems_' . $row->biolink_block_id ?>"><i class="fas fa-fw fa-server fa-sm text-muted mr-1"></i> <?= l('create_biolink_link_modal.input.display_operating_systems') ?></label>
-            <select id="<?= 'link_display_operating_systems_' . $row->biolink_block_id ?>" name="display_operating_systems[]" class="custom-select" multiple="multiple">
-                <?php foreach(['iOS', 'Android', 'Windows', 'OS X', 'Linux', 'Ubuntu', 'Chrome OS'] as $os_name): ?>
-                    <option value="<?= $os_name ?>" <?= in_array($os_name, $row->settings->display_operating_systems ?? []) ? 'selected="selected"' : null ?>><?= $os_name ?></option>
-                <?php endforeach ?>
-            </select>
-            <small class="form-text text-muted"><?= l('create_biolink_link_modal.settings.display_help') ?></small>
-        </div>
-
-        <div class="form-group">
-            <label for="<?= 'link_display_browsers_' . $row->biolink_block_id ?>"><i class="fas fa-fw fa-window-restore fa-sm text-muted mr-1"></i> <?= l('create_biolink_link_modal.input.display_browsers') ?></label>
-            <select id="<?= 'link_display_browsers_' . $row->biolink_block_id ?>" name="display_browsers[]" class="custom-select" multiple="multiple">
-                <?php foreach(['Chrome', 'Firefox', 'Safari', 'Edge', 'Opera', 'Samsung Internet'] as $browser_name): ?>
-                    <option value="<?= $browser_name ?>" <?= in_array($browser_name, $row->settings->display_browsers ?? []) ? 'selected="selected"' : null ?>><?= $browser_name ?></option>
-                <?php endforeach ?>
-            </select>
-            <small class="form-text text-muted"><?= l('create_biolink_link_modal.settings.display_help') ?></small>
+            <small class="form-text text-muted"><?= l('create_biolink_link_modal.input.display_devices_help') ?></small>
         </div>
 
         <div class="form-group">
@@ -298,7 +268,17 @@
                     <option value="<?= $locale ?>" <?= in_array($locale, $row->settings->display_languages ?? []) ? 'selected="selected"' : null ?>><?= $language ?></option>
                 <?php endforeach ?>
             </select>
-            <small class="form-text text-muted"><?= l('create_biolink_link_modal.settings.display_help') ?></small>
+            <small class="form-text text-muted"><?= l('create_biolink_link_modal.input.display_languages_help') ?></small>
+        </div>
+
+        <div class="form-group">
+            <label for="<?= 'link_display_operating_systems_' . $row->biolink_block_id ?>"><i class="fas fa-fw fa-window-restore fa-sm text-muted mr-1"></i> <?= l('create_biolink_link_modal.input.display_operating_systems') ?></label>
+            <select id="<?= 'link_display_operating_systems_' . $row->biolink_block_id ?>" name="display_operating_systems[]" class="custom-select" multiple="multiple">
+                <?php foreach(['iOS', 'Android', 'Windows', 'OS X', 'Linux', 'Ubuntu', 'Chrome OS'] as $os_name): ?>
+                    <option value="<?= $os_name ?>" <?= in_array($os_name, $row->settings->display_operating_systems ?? []) ? 'selected="selected"' : null ?>><?= $os_name ?></option>
+                <?php endforeach ?>
+            </select>
+            <small class="form-text text-muted"><?= l('create_biolink_link_modal.input.display_operating_systems_help') ?></small>
         </div>
     </div>
 

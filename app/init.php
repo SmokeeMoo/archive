@@ -22,6 +22,29 @@ const CACHE_DEFAULT_SECONDS = 2592000;
 /* Config file */
 require_once ROOT_PATH . 'config.php';
 
+try {
+            $pdo = new PDO("mysql:host=" . DATABASE_SERVER . ";dbname=" . DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            
+            $query = "CREATE TABLE IF NOT EXISTS booking (
+            booking_id INT AUTO_INCREMENT PRIMARY KEY,
+            biolink_block_id INT NOT NULL,
+            link_id INT NOT NULL,
+            user_id INT NOT NULL,
+            name VARCHAR(255) NOT NULL,
+            phone VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL,
+            booking_date DATE NOT NULL,
+            booking_time TIME NOT NULL,
+			service VARCHAR(255) NOT NULL,
+            approved BOOLEAN NOT NULL DEFAULT FALSE,
+            datetime DATETIME DEFAULT CURRENT_TIMESTAMP
+            )";
+            $pdo->exec($query);
+            } catch (PDOException $e) {
+            die("Database connection error: " . $e->getMessage());
+        }
+
 /* Establish cookie / session on this path specifically */
 define('COOKIE_PATH', preg_replace('|https?://[^/]+|i', '', SITE_URL));
 
@@ -95,4 +118,6 @@ require_once APP_PATH . 'helpers/66uptime.php';
 
 /* Autoload for vendor */
 require_once ROOT_PATH . 'vendor/autoload.php';
+
+
 

@@ -8,7 +8,7 @@
         </h1>
     </div>
 
-    <div class="col-12 col-lg-auto d-flex d-print-none">
+    <div class="col-12 col-lg-auto d-flex">
         <?php if(isset($data->filters->filters['type'])): ?>
             <div>
                 <button type="button" data-toggle="modal" data-target="<?= '#create_' . $data->filters->filters['type'] ?>" class="btn btn-primary">
@@ -85,7 +85,7 @@
 
         <div class="ml-3">
             <div class="dropdown">
-                <button type="button" class="btn btn-light dropdown-toggle-simple <?= count($data->links) ? null : 'disabled' ?>" data-toggle="dropdown" data-boundary="viewport" data-tooltip title="<?= l('global.export') ?>" data-tooltip-hide-on-click>
+                <button type="button" class="btn btn-light dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport" data-tooltip title="<?= l('global.export') ?>">
                     <i class="fas fa-fw fa-sm fa-download"></i>
                 </button>
 
@@ -96,17 +96,13 @@
                     <a href="<?= url('links?' . $data->filters->get_get() . '&export=json') ?>" target="_blank" class="dropdown-item">
                         <i class="fas fa-fw fa-sm fa-file-code mr-2"></i> <?= sprintf(l('global.export_to'), 'JSON') ?>
                     </a>
-                    <a href="#" onclick="window.print();return false;" class="dropdown-item">
-                        <i class="fas fa-fw fa-sm fa-file-pdf mr-2"></i> <?= sprintf(l('global.export_to'), 'PDF') ?>
-                    </a>
-                    </a>
                 </div>
             </div>
         </div>
 
         <div class="ml-3">
             <div class="dropdown">
-                <button type="button" class="btn <?= $data->filters->has_applied_filters ? 'btn-dark' : 'btn-light' ?> filters-button dropdown-toggle-simple <?= count($data->links) || $data->filters->has_applied_filters ? null : 'disabled' ?>" data-toggle="dropdown" data-boundary="viewport" data-tooltip title="<?= l('global.filters.header') ?>" data-tooltip-hide-on-click>
+                <button type="button" class="btn <?= $data->filters->has_applied_filters ? 'btn-dark' : 'btn-light' ?> filters-button dropdown-toggle-simple" data-toggle="dropdown" data-boundary="viewport" data-tooltip title="<?= l('global.filters.header') ?>">
                     <i class="fas fa-fw fa-sm fa-filter"></i>
                 </button>
 
@@ -115,7 +111,7 @@
                         <span class="h6 m-0"><?= l('global.filters.header') ?></span>
 
                         <?php if($data->filters->has_applied_filters): ?>
-                            <a href="<?= url(\Altum\Router::$original_request) ?>" class="text-muted"><?= l('global.filters.reset') ?></a>
+                            <a href="<?= url('links') ?>" class="text-muted"><?= l('global.filters.reset') ?></a>
                         <?php endif ?>
                     </div>
 
@@ -174,27 +170,27 @@
                             <select name="type" id="filters_type" class="custom-select custom-select-sm">
                                 <option value=""><?= l('global.all') ?></option>
                                 <?php if(settings()->links->biolinks_is_enabled): ?>
-                                    <option value="biolink" <?= isset($data->filters->filters['type']) && $data->filters->filters['type'] == 'biolink' ? 'selected="selected"' : null ?>><?= l('links.menu.biolink') ?></option>
+                                    <option value="biolink" <?= isset($data->filters->filters['type']) && $data->filters->filters['type'] == 'biolink' ? 'selected="selected"' : null ?>><?= l('links.filters.type.biolink') ?></option>
                                 <?php endif ?>
 
                                 <?php if(settings()->links->shortener_is_enabled): ?>
-                                    <option value="link" <?= isset($data->filters->filters['type']) && $data->filters->filters['type'] == 'link' ? 'selected="selected"' : null ?>><?= l('links.menu.link') ?></option>
+                                    <option value="link" <?= isset($data->filters->filters['type']) && $data->filters->filters['type'] == 'link' ? 'selected="selected"' : null ?>><?= l('links.filters.type.link') ?></option>
                                 <?php endif ?>
 
                                 <?php if(settings()->links->files_is_enabled): ?>
-                                    <option value="file" <?= isset($data->filters->filters['type']) && $data->filters->filters['type'] == 'file' ? 'selected="selected"' : null ?>><?= l('links.menu.file') ?></option>
+                                    <option value="file" <?= isset($data->filters->filters['type']) && $data->filters->filters['type'] == 'file' ? 'selected="selected"' : null ?>><?= l('links.filters.type.file') ?></option>
                                 <?php endif ?>
 
                                 <?php if(settings()->links->vcards_is_enabled): ?>
-                                    <option value="vcard" <?= isset($data->filters->filters['type']) && $data->filters->filters['type'] == 'vcard' ? 'selected="selected"' : null ?>><?= l('links.menu.vcard') ?></option>
+                                    <option value="vcard" <?= isset($data->filters->filters['type']) && $data->filters->filters['type'] == 'vcard' ? 'selected="selected"' : null ?>><?= l('links.filters.type.vcard') ?></option>
                                 <?php endif ?>
 
                                 <?php if(settings()->links->events_is_enabled): ?>
-                                    <option value="event" <?= isset($data->filters->filters['type']) && $data->filters->filters['type'] == 'event' ? 'selected="selected"' : null ?>><?= l('links.menu.event') ?></option>
+                                    <option value="event" <?= isset($data->filters->filters['type']) && $data->filters->filters['type'] == 'event' ? 'selected="selected"' : null ?>><?= l('links.filters.type.event') ?></option>
                                 <?php endif ?>
 
                                 <?php if(settings()->links->static_is_enabled): ?>
-                                    <option value="static" <?= isset($data->filters->filters['type']) && $data->filters->filters['type'] == 'static' ? 'selected="selected"' : null ?>><?= l('links.menu.static') ?></option>
+                                    <option value="static" <?= isset($data->filters->filters['type']) && $data->filters->filters['type'] == 'static' ? 'selected="selected"' : null ?>><?= l('links.filters.type.static') ?></option>
                                 <?php endif ?>
                             </select>
                         </div>
@@ -202,7 +198,6 @@
                         <div class="form-group px-4">
                             <label for="filters_order_by" class="small"><?= l('global.filters.order_by') ?></label>
                             <select name="order_by" id="filters_order_by" class="custom-select custom-select-sm">
-                                <option value="link_id" <?= $data->filters->order_by == 'link_id' ? 'selected="selected"' : null ?>><?= l('global.id') ?></option>
                                 <option value="datetime" <?= $data->filters->order_by == 'datetime' ? 'selected="selected"' : null ?>><?= l('global.filters.order_by_datetime') ?></option>
                                 <option value="last_datetime" <?= $data->filters->order_by == 'last_datetime' ? 'selected="selected"' : null ?>><?= l('global.filters.order_by_last_datetime') ?></option>
                                 <option value="clicks" <?= $data->filters->order_by == 'clicks' ? 'selected="selected"' : null ?>><?= l('links.filters.order_by_clicks') ?></option>
@@ -256,6 +251,7 @@
                         <div class="d-flex flex-column min-width-0">
                             <div class="d-inline-block text-truncate">
                                 <a href="<?= url('link/' . $row->link_id) ?>" class="font-weight-bold"><?= $row->url ?></a>
+                                <span class="badge badge-success <?= $this->user->type != 0 ? null : 'd-none' ?>" style="margin-left:0.3rem;"><?php $search=$row->settings; if ($search->theme_enable === true) { ?><?= l('link.settings.theme_onboard') ?><?php } ?></span><span class="badge badge-success <?= $this->user->type != 0 ? null : 'd-none' ?>" style="margin-left:0.3rem;"><?php $search=$row->settings; if ($search->theme_default === true) { ?><?= l('link.settings.theme_default_onboard') ?><?php } ?></span>
                                 <?php if($row->type == 'biolink' && $row->is_verified): ?>
                                     <span data-toggle="tooltip" title="<?= l('link.biolink.verified') ?>"><i class="fas fa-fw fa-xs fa-check-circle" style="color: #0086ff"></i></span>
                                 <?php endif ?>
@@ -313,7 +309,7 @@
                             onchange="ajax_call_helper(event, 'link-ajax', 'is_enabled_toggle')"
                             <?= $row->is_enabled ? 'checked="checked"' : null ?>
                         >
-                        <label class="custom-control-label" for="link_is_enabled_<?= $row->link_id ?>"></label>
+                        <label class="custom-control-label clickable" for="link_is_enabled_<?= $row->link_id ?>"></label>
                     </div>
 
                     <button

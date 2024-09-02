@@ -34,7 +34,7 @@ class PaymentProcessorUpdate extends Controller {
             $settings = [];
 
             $_POST['name'] = trim(query_clean($_POST['name']));
-            $_POST['processor'] = isset($_POST['processor']) && in_array($_POST['processor'], ['paypal', 'stripe', 'crypto_com', 'razorpay', 'paystack', 'mollie']) ? query_clean($_POST['processor']) : 'https://';
+            $_POST['processor'] = isset($_POST['processor']) && in_array($_POST['processor'], ['paypal', 'stripe', 'crypto_com', 'razorpay', 'paystack', 'mollie', 'yookassa']) ? query_clean($_POST['processor']) : 'https://';
 
             switch($_POST['processor']) {
                 case 'paypal':
@@ -68,6 +68,11 @@ class PaymentProcessorUpdate extends Controller {
 
                 case 'mollie':
                     $settings['api_key'] = $_POST['api_key'] = input_clean($_POST['api_key']);
+                    break;
+                    
+                case 'yookassa':
+                    $settings['secretkey'] = $_POST['secretkey'] = input_clean($_POST['secretkey']);
+                    $settings['shop_id'] = $_POST['shop_id'] = input_clean($_POST['shop_id']);
                     break;
             }
 
@@ -106,7 +111,7 @@ class PaymentProcessorUpdate extends Controller {
             }
         }
 
-        /* Prepare the view */
+        /* Prepare the View */
         $data = [
             'payment_processor' => $payment_processor,
         ];

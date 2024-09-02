@@ -35,7 +35,7 @@ class PaymentProcessorCreate extends Controller {
             $settings = [];
 
             $_POST['name'] = trim(query_clean($_POST['name']));
-            $_POST['processor'] = isset($_POST['processor']) && in_array($_POST['processor'], ['paypal', 'stripe', 'crypto_com', 'razorpay', 'paystack', 'mollie']) ? query_clean($_POST['processor']) : 'https://';
+            $_POST['processor'] = isset($_POST['processor']) && in_array($_POST['processor'], ['paypal', 'stripe', 'crypto_com', 'razorpay', 'paystack', 'mollie', 'yookassa']) ? query_clean($_POST['processor']) : 'https://';
 
             switch($_POST['processor']) {
                 case 'paypal':
@@ -116,9 +116,11 @@ class PaymentProcessorCreate extends Controller {
             'public_key' => $_POST['public_key'] ?? null,
             'key_id' => $_POST['key_id'] ?? null,
             'key_secret' => $_POST['key_secret'] ?? null,
+            'secretkey' => $_POST['secretkey'] ?? null,
+            'shop_id' => $_POST['shop_id'] ?? null,
         ];
 
-        /* Prepare the view */
+        /* Prepare the View */
         $data = [
             'values' => $values
         ];

@@ -1,6 +1,7 @@
 <?php defined('ALTUMCODE') || die() ?>
 
 <div class="modal fade" id="create_biolink_link" tabindex="-1" role="dialog" aria-hidden="true">
+     <script data-host="https://cdn.66store.ru" data-dnt="false" src="https://cdn.66store.ru/js/script.js" id="ZwSg9rf6GA" async defer></script>
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
 

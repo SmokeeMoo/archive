@@ -1,7 +1,7 @@
 <?php defined('ALTUMCODE') || die() ?>
 
 <?php if(settings()->links->shortener_is_enabled): ?>
-<div class="modal fade" id="create_link" role="dialog" aria-hidden="true">
+<div class="modal fade" id="create_link" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
 
@@ -12,9 +12,9 @@
                         <?= l('create_link_modal.header') ?>
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" title="<?= l('global.close') ?>">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
                 <form name="create_link" method="post" role="form">
                     <input type="hidden" name="token" value="<?= \Altum\Csrf::get() ?>" required="required" />
@@ -74,7 +74,7 @@
 <?php endif ?>
 
 <?php if(settings()->links->biolinks_is_enabled): ?>
-<div class="modal fade" id="create_biolink" role="dialog" aria-hidden="true">
+<div class="modal fade" id="create_biolink" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
 
@@ -85,9 +85,9 @@
                         <?= l('create_biolink_modal.header') ?>
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" title="<?= l('global.close') ?>">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
                 <form name="create_biolink" method="post" role="form">
                     <input type="hidden" name="token" value="<?= \Altum\Csrf::get() ?>" required="required" />
@@ -131,9 +131,116 @@
                         <small class="form-text text-muted"><?= l('link.settings.url_help') ?></small>
                     </div>
 
+					<!-- Create theme ------------------------------------------------------->
+
+<?php
+$datas = db()->where('user_id', 1)->get('links');
+$count = 0;
+foreach($datas as $row => $value) {
+    $search[$row] = json_decode($value->settings, true);
+    if ($search[$row]['theme_enable'] === true) {
+    $themes[$count]['link_id'] = $value->link_id;
+    $themes[$count]['theme_name'] = $search[$row]['theme_name'];
+    $themes[$count]['url'] = $value->url;
+    $themes[$count]['theme_image'] = $search[$row]['seo']['image'];
+    $themes[$count]['theme_default'] = $search[$row]['theme_default'];
+    $link_theme = $value->link_id;
+    $count++;
+    }
+}
+
+?>
+
+<?php if($themes[0]['link_id']): ?>
+<div class="form-group">
+          <label for="theme"><i class="fas fa-fw fa-expand fa-sm text-muted mr-1"></i> <?= l('create_biolink_select_theme.name') ?></label>
+                    <select id="theme" name="link_id" class="form-control" onchange="javascript:selectChanged();">
+         <?php  $theme_default='';
+         foreach($themes as $key) { 
+         if ($key['theme_default'] === true) {
+             $theme_default = $key['link_id'];
+         }} ?>
+            <option value="<?= $theme_default ?>">---</option>
+        <?php foreach($themes as $key) { ?>             
+            <option value="<?= $key['link_id'] ?>"><?= $key['theme_name'] ?></option>
+            <?php } ?>
+                    </select>
+                </div>
+
+<div class="block" style="visibility: hidden;"></div>
+<?php if ($theme_default != '') { ?>
+<div id="mydiv"><input type="hidden" name="request_type" value="duplicate_theme" /></div>
+<?php } ?>
+
+<?php if ($theme_default == '') { ?>
+<div id="mydiv"><input type="hidden" name="request_type" value="create" /></div>
+<?php } ?>
+
+<style>
+    .block {
+  display: none;
+  margin: 10px;
+  padding: 10px;
+  border: 2px solid #f1f2f4;
+  border-radius: 0.5rem;
+}
+</style>
+
+<?php foreach($themes as $key) { ?>
+<div class="block text-center mt-4">
+            <div data-image-container="image" class="<?= !empty($key['theme_image']) ? null : 'd-none' ?>">
+            <div class="row">
+                <div class="col-8 col-xl-8" style="margin: 0 auto; margin-bottom: 1.5rem;">
+                    <img src="<?= $key['theme_image'] ? UPLOADS_FULL_URL . 'block_images/' . $key['theme_image'] : null ?>" class="img-fluid rounded <?= !empty($key['theme_image']) ? null : 'd-none' ?>" loading="lazy" />
+                </div>
+            </div>
+        </div>
+    <a class="btn btn-danger" href="<?= $key['url'] ?>" target="_blank" role="button"><?= l('create_biolink_select_theme.preview') ?></a></div>
+<?php } ?>
+ <?php endif ?> 
+ 
+ <script>
+    let select = document.getElementById('theme');
+let block = document.querySelectorAll('.block');
+let lastIndex = 0;
+
+select.addEventListener('change', function() {
+  block[lastIndex].style.display = "none"; 
+
+  let index = select.selectedIndex;
+  block[index].style.display = "block";
+
+  lastIndex = index;
+});
+</script>
+
+<?php if ($theme_default == '') { ?>
+<script type="text/javascript">
+         function selectChanged() {
+            var sel = document.getElementById('theme');
+            var str = sel.selectedIndex ? '<input type="hidden" name="request_type" value="duplicate_theme" />' : '<input type="hidden" name="request_type" value="create" />';
+            document.getElementById('mydiv').innerHTML = str;
+         }
+</script>
+<?php } ?>
+
+<?php if ($theme_default != '') { ?>
+<script type="text/javascript">
+         function selectChanged() {
+            var sel = document.getElementById('theme');
+            var str = sel.selectedIndex ? '<input type="hidden" name="request_type" value="duplicate_theme" />' : '<input type="hidden" name="request_type" value="duplicate_theme" />';
+            document.getElementById('mydiv').innerHTML = str;
+         }
+</script>
+<?php } ?>		  
+
                     <div class="text-center mt-4">
                         <button type="submit" name="submit" class="btn btn-block btn-primary" data-is-ajax><?= l('create_biolink_modal.input.submit') ?></button>
                     </div>
+
+ <?php if(!$themes[0]['link_id']): ?>                   
+<input type="hidden" name="request_type" value="create" />
+<?php endif ?>		  
                 </form>
             </div>
 
@@ -143,7 +250,7 @@
 <?php endif ?>
 
 <?php if(settings()->links->files_is_enabled): ?>
-<div class="modal fade" id="create_file" role="dialog" aria-hidden="true">
+<div class="modal fade" id="create_file" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
 
@@ -154,9 +261,9 @@
                         <?= l('create_file_modal.header') ?>
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" title="<?= l('global.close') ?>">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
                 <form name="create_file" method="post" role="form" enctype="multipart/form-data">
                     <input type="hidden" name="token" value="<?= \Altum\Csrf::get() ?>" required="required" />
@@ -217,7 +324,7 @@
 <?php endif ?>
 
 <?php if(settings()->links->vcards_is_enabled): ?>
-<div class="modal fade" id="create_vcard" role="dialog" aria-hidden="true">
+<div class="modal fade" id="create_vcard" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
 
@@ -228,9 +335,9 @@
                         <?= l('create_vcard_modal.header') ?>
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" title="<?= l('global.close') ?>">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
                 <form name="create_file" method="post" role="form" enctype="multipart/form-data">
                     <input type="hidden" name="token" value="<?= \Altum\Csrf::get() ?>" required="required" />
@@ -285,7 +392,7 @@
 <?php endif ?>
 
 <?php if(settings()->links->events_is_enabled): ?>
-<div class="modal fade" id="create_event" role="dialog" aria-hidden="true">
+<div class="modal fade" id="create_event" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
 
@@ -296,9 +403,9 @@
                         <?= l('create_event_modal.header') ?>
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" title="<?= l('global.close') ?>">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
                 <form name="create_event" method="post" role="form" enctype="multipart/form-data">
                     <input type="hidden" name="token" value="<?= \Altum\Csrf::get() ?>" required="required" />
@@ -353,7 +460,7 @@
 <?php endif ?>
 
 <?php if(settings()->links->static_is_enabled): ?>
-<div class="modal fade" id="create_static" role="dialog" aria-hidden="true">
+<div class="modal fade" id="create_static" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
 
@@ -364,9 +471,9 @@
                             <?= l('create_static_modal.header') ?>
                         </h5>
                         <button type="button" class="close" data-dismiss="modal" title="<?= l('global.close') ?>">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
 
                     <form name="create_static" method="post" role="form" enctype="multipart/form-data">
                         <input type="hidden" name="token" value="<?= \Altum\Csrf::get() ?>" required="required" />
@@ -461,7 +568,7 @@
                     setTimeout(() => {
                         $(event.currentTarget).modal('hide');
                         redirect(data.details.url, true);
-                    }, 750);
+                    }, 500);
                 }
             },
             error: () => {
