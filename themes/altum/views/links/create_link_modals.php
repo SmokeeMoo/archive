@@ -138,7 +138,7 @@ $datas = db()->where('user_id', 1)->get('links');
 $count = 0;
 foreach($datas as $row => $value) {
     $search[$row] = json_decode($value->settings, true);
-    if ($search[$row]['theme_enable'] === true) {
+    if ($search[$row]['theme_enable'] === true || $search[$row]['theme_enable'] == 'on') {
     $themes[$count]['link_id'] = $value->link_id;
     $themes[$count]['theme_name'] = $search[$row]['theme_name'];
     $themes[$count]['url'] = $value->url;
@@ -157,7 +157,7 @@ foreach($datas as $row => $value) {
                     <select id="theme" name="link_id" class="form-control" onchange="javascript:selectChanged();">
          <?php  $theme_default='';
          foreach($themes as $key) { 
-         if ($key['theme_default'] === true) {
+         if ($key['theme_default'] === true || $key['theme_default'] == 'on') {
              $theme_default = $key['link_id'];
          }} ?>
             <option value="<?= $theme_default ?>">---</option>

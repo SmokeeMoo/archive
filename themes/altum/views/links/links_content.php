@@ -251,7 +251,7 @@
                         <div class="d-flex flex-column min-width-0">
                             <div class="d-inline-block text-truncate">
                                 <a href="<?= url('link/' . $row->link_id) ?>" class="font-weight-bold"><?= $row->url ?></a>
-                                <span class="badge badge-success <?= $this->user->type != 0 ? null : 'd-none' ?>" style="margin-left:0.3rem;"><?php $search=$row->settings; if ($search->theme_enable === true) { ?><?= l('link.settings.theme_onboard') ?><?php } ?></span><span class="badge badge-success <?= $this->user->type != 0 ? null : 'd-none' ?>" style="margin-left:0.3rem;"><?php $search=$row->settings; if ($search->theme_default === true) { ?><?= l('link.settings.theme_default_onboard') ?><?php } ?></span>
+                                <span class="badge badge-success <?= $this->user->type != 0 ? null : 'd-none' ?>" style="margin-left:0.3rem;"><?php $search=$row->settings; if ($search->theme_enable === true || $search->theme_enable == 'on') { ?><?= l('link.settings.theme_onboard') ?><?php } ?></span><span class="badge badge-success <?= $this->user->type != 0 ? null : 'd-none' ?>" style="margin-left:0.3rem;"><?php $search=$row->settings; if ($search->theme_default === true || $search->theme_default == 'on') { ?><?= l('link.settings.theme_default_onboard') ?><?php } ?></span>
                                 <?php if($row->type == 'biolink' && $row->is_verified): ?>
                                     <span data-toggle="tooltip" title="<?= l('link.biolink.verified') ?>"><i class="fas fa-fw fa-xs fa-check-circle" style="color: #0086ff"></i></span>
                                 <?php endif ?>
